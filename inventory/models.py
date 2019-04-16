@@ -1,34 +1,43 @@
+from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.models import ContentType
 from django.db import models
 
-# Create your models here.
 
-
-class Medicines(models.Model):
-
-    med_name = models.CharField(max_length=100)
-    mean_demand = models.FloatField(default=0)
-    std_dev = models.FloatField(default=0)
-    Holding_cost = models.FloatField(default=0)
-    Price = models.FloatField(default=0)
-    Ordering_cost = models.FloatField(default=0)
+class Medicine(models.Model):
+    name = models.CharField(max_length=100)
+    mean = models.FloatField(default=0.0)
+    sd = models.FloatField(default=0.0)
+    price = models.FloatField(default=0.0)
+    holding_cost = models.FloatField(default=0.0)
+    ordering_cost = models.FloatField(default=0.0)
 
     def __str__(self):
-        return f'{self.med_name}'
+        return f'{self.name}'
 
-class Centres(models.Model):
-    Centre_name = models.CharField(max_length=100)
-    med_name = models.CharField(max_length=100)
-    Lead_time = models.FloatField(default=0)
-    Std_dev = models.FloatField(default=0)
+
+class Centre(models.Model):
+    name = models.CharField(max_length=100)
 
     def __str__(self):
-        return f'{self.Centre_name}'
+        return f'{self.name}'
 
-class Suppliers(models.Model):
-    Supp_name = models.CharField(max_length=100)
-    med_name = models.CharField(max_length=100)
-    LT = models.FloatField(default=0)
-    Sdev = models.FloatField(default=0)
+
+class Supplier(models.Model):
+    name = models.CharField(max_length=100)
 
     def __str__(self):
-        return f'{self.Supp_name}'
+        return f'{self.name}'
+
+
+class OtherInfo(models.Model):
+    medicine = models.ForeignKey(Medicine, on_delete=models.CASCADE)
+    sd = models.FloatField(default=0.0)
+    lead_time = models.FloatField(default=0.0)
+
+    limit = models.Q(app_label='inventory', model='centre') | models.Q(app_label='inventory', model='supplier')
+    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE, limit_choices_to=limit)
+    object_id = models.PositiveIntegerField()
+    content_object = GenericForeignKey('content_type', 'object_id')
+
+    def __str__(self):
+        return f'{self.medicine.name}'

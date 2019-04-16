@@ -2,8 +2,9 @@ from django.contrib import admin
 
 # Register your models here.
 
-from .models import Medicines, Centres, Suppliers
+from .models import *
 
-admin.site.register(Medicines)
-admin.site.register(Centres)
-admin.site.register(Suppliers)
+admin.site.register(Medicine)
+admin.site.register(Centre)
+admin.site.register(Supplier)
+admin.site.register(OtherInfo)
