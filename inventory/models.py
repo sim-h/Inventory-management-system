@@ -10,23 +10,25 @@ class Medicine(models.Model):
     price = models.FloatField(default=0.0)
     holding_cost = models.FloatField(default=0.0)
     ordering_cost = models.FloatField(default=0.0)
+    Supplier_name = models.CharField(max_length=100)
+    Centre_name = models.CharField(max_length=100)
 
     def __str__(self):
         return f'{self.name}'
 
 
-class Centre(models.Model):
-    name = models.CharField(max_length=100)
-
-    def __str__(self):
-        return f'{self.name}'
-
-
-class Supplier(models.Model):
-    name = models.CharField(max_length=100)
-
-    def __str__(self):
-        return f'{self.name}'
+# class Centre(models.Model):
+#     name = models.CharField(max_length=100)
+#
+#     def __str__(self):
+#         return f'{self.name}'
+#
+#
+# class Supplier(models.Model):
+#     name = models.CharField(max_length=100)
+#
+#     def __str__(self):
+#         return f'{self.name}'
 
 
 class OtherInfo(models.Model):
