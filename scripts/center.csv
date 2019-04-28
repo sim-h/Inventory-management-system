@@ -1,0 +1,21 @@
+Center,Medicine,Lead time,std dev
+T1,Aspirin,2,0.5
+T2,Tobramycin,3,0.25
+T3,zeptol,4,0.75
+T4,flexon,1,1
+T5,combiflam,2,0.2
+T1,azithromycin,2,0.5
+T2,Ceterizine,3,0.25
+T3,Ranitidine,4,0.75
+T4,Cyclopam,1,1
+T5,Omden,2,0.2
+T1,Avomine,2,0.5
+T2,Ubisaan,3,0.25
+T3,Metronidazole,4,0.75
+T4,Voveran,1,1
+T5,Rozustat,2,0.2
+T1,Cimetidine,2,0.5
+T2,Famotidine,3,0.25
+T3,Calbec,4,0.75
+T4,Crocin-500,1,1
+T5,Alfrex,2,0.2

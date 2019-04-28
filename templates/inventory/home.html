@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Inventory</title>
+</head>
+<body>
+<h3>Inventory</h3>
+<table border="1" width="300">
+    <tr>
+        <td>medicine</td>
+        <td style="text-align: right">{{ medicine_count }}</td>
+        <td>
+            <a href="{% url 'admin:inventory_medicine_changelist' %}">list</a>
+        </td>
+    </tr>
+    <tr>
+        <td>supplier</td>
+        <td style="text-align: right">{{ supplier_count }}</td>
+        <td>
+            <a href="{% url 'admin:inventory_supplier_changelist' %}">list</a>
+        </td>
+    </tr>
+    <tr>
+        <td>centre</td>
+        <td style="text-align: right">{{ centre_count }}</td>
+        <td>
+            <a href="{% url 'admin:inventory_centre_changelist' %}">list</a>
+        </td>
+    </tr>
+</table>
+</body>
+</html>
