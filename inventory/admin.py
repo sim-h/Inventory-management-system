@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.contrib.contenttypes.admin import GenericTabularInline
 
 from .models import *
 
@@ -6,30 +7,33 @@ from .models import *
 # Register your models here.
 
 
+class OtherInfoAdmin(GenericTabularInline):
+    model = OtherInfo
+
+
 class MedicineAdmin(admin.ModelAdmin):
     list_display = ['name', 'mean', 'sd', 'price', 'holding_cost', 'ordering_cost']
-
-
-admin.site.register(Medicine, MedicineAdmin)
+    list_editable = ['mean', 'sd', 'price', 'holding_cost', 'ordering_cost']
 
 
 class SupplierAdmin(admin.ModelAdmin):
-    list_display = ['name']
+    list_display = ['name', 'medicine_count']
+    inlines = [OtherInfoAdmin]
 
-
-admin.site.register(Supplier, SupplierAdmin)
+    @staticmethod
+    def medicine_count(obj):
+        return OtherInfo.objects.filter(object_id=obj.id, content_type__model='supplier').count()
 
 
 class CentreAdmin(admin.ModelAdmin):
-    list_display = ['name']
+    list_display = ['name', 'medicine_count']
+    inlines = [OtherInfoAdmin]
+
+    @staticmethod
+    def medicine_count(obj):
+        return OtherInfo.objects.filter(object_id=obj.id, content_type__model='centre').count()
 
 
+admin.site.register(Medicine, MedicineAdmin)
+admin.site.register(Supplier, SupplierAdmin)
 admin.site.register(Centre, CentreAdmin)
-
-
-class OtherInfoAdmin(admin.ModelAdmin):
-    list_display = ['content_type', 'object_id', 'medicine', 'lead_time', 'sd']
-    list_filter = ['content_type']
-
-
-admin.site.register(OtherInfo, OtherInfoAdmin)

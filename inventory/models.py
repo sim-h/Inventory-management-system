@@ -46,6 +46,7 @@ class OtherInfo(models.Model):
         index_together = [
             ["content_type", "object_id"],
         ]
+        unique_together = ["content_type", "object_id", "medicine"]
 
     def __str__(self):
         return f'{self.medicine.name}'
