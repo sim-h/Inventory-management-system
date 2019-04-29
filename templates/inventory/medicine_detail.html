@@ -7,11 +7,12 @@
 <body>
     <ul>
         <li>name = {{ medicine.name }}</li>
-        <li>mean = {{ medicine.mean }}</li>
-        <li>sd = {{ medicine.sd }}</li>
+        <li>mean_demand = {{ medicine.mean_demand }}</li>
+        <li>sd_of_demand = {{ medicine.sd_of_demand }}</li>
         <li>price = {{ medicine.price }}</li>
         <li>holding_cost = {{ medicine.holding_cost }}</li>
         <li>ordering_cost = {{ medicine.ordering_cost }}</li>
+        <li>{{ medicine.get_total_lead_time }}</li>
     </ul>
 </body>
 </html>

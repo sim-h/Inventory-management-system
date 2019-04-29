@@ -1,18 +1,22 @@
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
-
+from django.db.models import Sum
 
 class Medicine(models.Model):
     name = models.CharField(max_length=100, db_index=True)
-    mean = models.FloatField(default=0.0)
-    sd = models.FloatField(default=0.0)
+    mean_demand = models.FloatField(default=0.0)
+    sd_of_demand = models.FloatField(default=0.0)
     price = models.FloatField(default=0.0)
     holding_cost = models.FloatField(default=0.0)
     ordering_cost = models.FloatField(default=0.0)
 
     def __str__(self):
         return f'{self.name}'
+
+
+    def get_total_lead_time(self):
+        return "hello"
 
 
 class Centre(models.Model):

@@ -12,8 +12,8 @@ class OtherInfoAdmin(GenericTabularInline):
 
 
 class MedicineAdmin(admin.ModelAdmin):
-    list_display = ['name', 'mean', 'sd', 'price', 'holding_cost', 'ordering_cost']
-    list_editable = ['mean', 'sd', 'price', 'holding_cost', 'ordering_cost']
+    list_display = ['name', 'mean_demand', 'sd_of_demand', 'price', 'holding_cost', 'ordering_cost']
+    list_editable = ['mean_demand', 'sd_of_demand', 'price', 'holding_cost', 'ordering_cost']
 
 
 class SupplierAdmin(admin.ModelAdmin):
