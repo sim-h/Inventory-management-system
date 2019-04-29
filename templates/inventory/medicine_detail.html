@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>DETAILS</title>
+</head>
+<body>
+    <ul>
+    {% for medicine in object_list %}
+        <li>{{ medicine.mean }}</li>
+        <li>{{ medicine.sd }}</li>
+        <li>{{ medicine.price }}</li>
+        <li>{{ medicine.holding_cost }}</li>
+        <li>{{ medicine.ordering_cost }}</li>
+    {% empty %}
+        <li>No medicines yet.</li>
+    {% endfor %}
+    </ul>
+</body>
+</html>
