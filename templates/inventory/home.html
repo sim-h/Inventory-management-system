@@ -8,7 +8,9 @@
 <h3>Inventory</h3>
 <table border="1" width="300">
     <tr>
-        <td>medicine</td>
+        <td>
+            <a href="{% url 'inventory:medicine_list' %}">medicine</a>
+        </td>
         <td style="text-align: right">{{ medicine_count }}</td>
         <td>
             <a href="{% url 'admin:inventory_medicine_changelist' %}">list</a>
