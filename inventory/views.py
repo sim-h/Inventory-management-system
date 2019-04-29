@@ -1,7 +1,8 @@
 from django.views.generic import TemplateView
 
 from inventory.models import Medicine, Supplier, Centre
-
+from django.views.generic.list import ListView
+from django.views.generic.detail import DetailView
 
 class InventoryHome(TemplateView):
     template_name = 'inventory/home.html'
@@ -15,3 +16,14 @@ class InventoryHome(TemplateView):
         context['centre_count'] = Centre.objects.count()
 
         return context
+
+
+class MedicineList(ListView):
+
+    model = Medicine
+
+
+class MedicineDetails(DetailView):
+
+    model = Medicine
+
