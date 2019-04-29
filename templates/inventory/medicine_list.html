@@ -8,7 +8,7 @@
     <ul>
     {% for medicine in object_list %}
         <li>
-            <a href="{% url 'inventory:medicine_detail' %}">{{medicine.name}}</a>
+            <a href="{% url 'inventory:medicine_detail' medicine.pk %}">{{medicine.name}}</a>
         </li>
     {% empty %}
         <li>No medicines yet.</li>
