@@ -1,8 +1,9 @@
 from django.views.generic import TemplateView
+from django.views.generic.detail import DetailView
+from django.views.generic.list import ListView
 
 from inventory.models import Medicine, Supplier, Centre
-from django.views.generic.list import ListView
-from django.views.generic.detail import DetailView
+
 
 class InventoryHome(TemplateView):
     template_name = 'inventory/home.html'
@@ -19,11 +20,8 @@ class InventoryHome(TemplateView):
 
 
 class MedicineList(ListView):
-
     model = Medicine
 
 
 class MedicineDetails(DetailView):
-
     model = Medicine
-
