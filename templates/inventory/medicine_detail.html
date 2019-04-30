@@ -12,7 +12,11 @@
         <li>price = {{ medicine.price }}</li>
         <li>holding_cost = {{ medicine.holding_cost }}</li>
         <li>ordering_cost = {{ medicine.ordering_cost }}</li>
-        <li>{{ medicine.get_total_lead_time }}</li>
+        <li>Total LT = {{ medicine.get_total_lead_time }}</li>
+        <li>Total sd = {{ medicine.get_total_sd }}</li>
+        <li>ROP = {{ medicine.get_rop }}</li>
+        <li>annual demand = {{ medicine.get_annual_demand }}</li>
+        <li>OrderFreq = {{ medicine.get_OrderFreq }}</li>
     </ul>
 </body>
 </html>

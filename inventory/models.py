@@ -2,6 +2,10 @@ from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from django.db.models import Sum
+import pandas as pd
+from scipy.stats import norm
+import numpy as np
+
 
 class Medicine(models.Model):
     name = models.CharField(max_length=100, db_index=True)
@@ -14,9 +18,81 @@ class Medicine(models.Model):
     def __str__(self):
         return f'{self.name}'
 
+    def get_total_supplier_lead_time(self):
+        cursor = OtherInfo.objects.filter(medicine=self, content_type=ContentType.objects.get_for_model(Supplier))
+        sum = 0
+        for obj in cursor:
+            sum += obj.lead_time
+        return sum
+
+    def get_total_centre_lead_time(self):
+        cursor = OtherInfo.objects.filter(medicine=self, content_type=ContentType.objects.get_for_model(Centre))
+        sum = 0
+        for obj in cursor:
+            sum += obj.lead_time
+        return sum
 
     def get_total_lead_time(self):
-        return "hello"
+        Sum = self.get_total_centre_lead_time() + self.get_total_supplier_lead_time()
+        return Sum
+
+    def get_total_supplier_sd(self):
+        cursor = OtherInfo.objects.filter(medicine=self, content_type=ContentType.objects.get_for_model(Supplier))
+        sum = 0
+        for obj in cursor:
+            sum += obj.sd
+        return sum
+
+    def get_total_centre_sd(self):
+        cursor = OtherInfo.objects.filter(medicine=self, content_type=ContentType.objects.get_for_model(Centre))
+        sum = 0
+        for obj in cursor:
+            sum += obj.sd
+        return sum
+
+    def get_total_sd(self):
+        sd1 = self.get_total_supplier_sd()
+        sd2 = self.get_total_centre_sd()
+        sdev = (sd1*sd1 + sd2*sd2)**0.5
+        return sdev
+
+    def get_annual_demand(self):
+        ls = []
+        ls = np.random.normal(self.mean_demand, self.sd_of_demand, 365)
+        sum = 0
+        for i in ls:
+            sum += i
+        annual_demand = sum
+        return annual_demand
+
+    def get_rop(self):
+        ROP = (norm.ppf(0.9, loc=self.mean_demand, scale=self.sd_of_demand) * (((self.get_total_lead_time() * ((self.sd_of_demand) ** 2)) + (((self.mean_demand) ** 2) * ((self.get_total_sd()) ** 2))) ** 0.5)) + self.mean_demand * self.get_total_lead_time()
+        return ROP
+
+    def get_OrderFreq(self):
+        ni = ((self.holding_cost * self.price * self.get_annual_demand()) + (2 * (4000 + self.ordering_cost))) ** 0.5
+        nii = ((self.holding_cost * self.price * self.get_annual_demand()) + (2 * (self.ordering_cost))) ** 0.5
+        mi = ni // nii
+        num = self.holding_cost * self.price * self.get_annual_demand() * mi
+        deno = self.ordering_cost / mi
+        b = Medicine.objects.aggregate(Sum('num'))    #improvecode
+        c = Medicine.objects.aggregate(Sum('deno'))   #improvecode
+        c = (c+4000)*2
+        n = (b/c)**0.5
+        Ord_freq = n // mi
+        return Ord_freq
+
+    def get_EOQ(self):
+        EOQ = self.get_annual_demand()/self.get_OrderFreq()
+        return EOQ
+    #
+    # def get_act_order_freq(self):
+    #     act_order_freq =
+    #     return act_order_freq
+    #
+    # def get_overstock(self):
+    #     overstock =
+    #     return overstock
 
 
 class Centre(models.Model):
