@@ -70,13 +70,18 @@ class Medicine(models.Model):
         return ROP
 
     def get_OrderFreq(self):
-        ni = ((self.holding_cost * self.price * self.get_annual_demand()) + (2 * (4000 + self.ordering_cost))) ** 0.5
-        nii = ((self.holding_cost * self.price * self.get_annual_demand()) + (2 * (self.ordering_cost))) ** 0.5
-        mi = ni // nii
-        num = self.holding_cost * self.price * self.get_annual_demand() * mi
-        deno = self.ordering_cost / mi
-        b = Medicine.objects.aggregate(Sum('num'))    #improvecode
-        c = Medicine.objects.aggregate(Sum('deno'))   #improvecode
+        cursor = Medicine.objects.all()
+        b = 0
+        c = 0
+        for obj in cursor:
+            ni = ((obj.holding_cost * obj.price * obj.get_annual_demand()) + (
+                        2 * (4000 + obj.ordering_cost))) ** 0.5
+            nii = ((obj.holding_cost * obj.price * obj.get_annual_demand()) + (2 * obj.ordering_cost)) ** 0.5
+            mi = ni // nii
+            num = obj.holding_cost * obj.price * obj.get_annual_demand() * mi
+            deno = obj.ordering_cost / mi
+            b += num
+            c += deno
         c = (c+4000)*2
         n = (b/c)**0.5
         Ord_freq = n // mi
@@ -85,15 +90,35 @@ class Medicine(models.Model):
     def get_EOQ(self):
         EOQ = self.get_annual_demand()/self.get_OrderFreq()
         return EOQ
-    #
-    # def get_act_order_freq(self):
-    #     act_order_freq =
-    #     return act_order_freq
-    #
-    # def get_overstock(self):
-    #     overstock =
-    #     return overstock
 
+    def get_order_freq_overstock(self):
+        f = []
+        k = []
+        f = np.random.normal(self.mean_demand, self.sd_of_demand, 365)
+        x = self.get_EOQ()
+        l = 0
+        for i in range(len(f)):
+            x = x - f[i]
+            k.append(x)
+            if (x == 0):
+                x = self.get_EOQ()
+                l += 1
+            elif (i!=len(f)-1 and x-f[i+1] < 0):
+                x = self.get_EOQ()
+                l += 1
+        act_order_freq = l
+        overstock = k[len(k)-1]
+        ans = [act_order_freq, overstock]
+        return ans
+
+    def get_act_order_freq(self):
+        act_order_freq = self.get_order_freq_overstock()[0]
+        return act_order_freq
+
+    def get_overstock(self):
+        overstock = self.get_order_freq_overstock()[1]
+        return overstock
+    
 
 class Centre(models.Model):
     name = models.CharField(max_length=100, db_index=True)
