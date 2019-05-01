@@ -18,6 +18,12 @@ class Medicine(models.Model):
     def __str__(self):
         return f'{self.name}'
 
+    # def get_centre_names(self):
+    #     # cursor = OtherInfo.objects.filter(medicine=self, content_type=ContentType.objects.get_for_model(Supplier))
+    #     # for obj in cursor:
+    #     #     print (obj.name)
+    # def get_supplier_names(self):
+
     def get_total_supplier_lead_time(self):
         cursor = OtherInfo.objects.filter(medicine=self, content_type=ContentType.objects.get_for_model(Supplier))
         sum = 0
